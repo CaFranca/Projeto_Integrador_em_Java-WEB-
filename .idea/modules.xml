@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AplicacaoTelaSDI.iml" filepath="$PROJECT_DIR$/AplicacaoTelaSDI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Projeto_Integrador_em_Java-WEB-.iml" filepath="$PROJECT_DIR$/.idea/Projeto_Integrador_em_Java-WEB-.iml" />
     </modules>
   </component>
 </project>

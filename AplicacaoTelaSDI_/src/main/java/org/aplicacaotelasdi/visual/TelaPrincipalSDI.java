@@ -1,4 +1,4 @@
-package visual;
+package org.aplicacaotelasdi.visual;
 
 import javax.swing.*;
 import java.awt.*;

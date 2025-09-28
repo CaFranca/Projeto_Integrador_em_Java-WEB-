@@ -1,11 +1,17 @@
-package visual;
+package org.aplicacaotelasdi.visual;
+
+import org.aplicacaotelasdi.services.VeiculoDAO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.regex.Pattern;
 
 public class TelaCadastroVeiculo extends JFrame {
     private JTextField txtPlaca, txtModelo, txtMarca, txtAno;
     private JButton btnSalvar, btnCancelar;
+
+    // Regex simples para placas brasileiras (ABC1234 ou ABC1D23)
+    private static final Pattern PLACA_PATTERN = Pattern.compile("^[A-Z]{3}\\d{1}[A-Z]{1}\\d{2}$|^[A-Z]{3}\\d{4}$");
 
     public TelaCadastroVeiculo(JFrame parent) {
         setTitle("Cadastro de Veículo");
@@ -65,14 +71,37 @@ public class TelaCadastroVeiculo extends JFrame {
     }
 
     private void salvarVeiculo() {
-        String placa = txtPlaca.getText().trim();
+        String placa = txtPlaca.getText().trim().toUpperCase();
         String modelo = txtModelo.getText().trim();
         String marca = txtMarca.getText().trim();
-        String ano = txtAno.getText().trim();
+        String anoStr = txtAno.getText().trim();
 
+        // Validação obrigatória
         if (placa.isEmpty() || modelo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Preencha os campos obrigatórios: Placa e Modelo.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
+        }
+
+        // Validação de placa
+        if (!PLACA_PATTERN.matcher(placa).matches()) {
+            JOptionPane.showMessageDialog(this, "Placa inválida. Use o formato ABC1234 ou ABC1D23.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Validação do ano
+        int ano = 0;
+        if (!anoStr.isEmpty()) {
+            try {
+                ano = Integer.parseInt(anoStr);
+                int anoAtual = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+                if (ano < 1900 || ano > anoAtual) {
+                    JOptionPane.showMessageDialog(this, "Ano inválido. Informe um valor entre 1900 e " + anoAtual + ".", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Ano deve ser um número válido.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
         }
 
         boolean ok = VeiculoDAO.salvar(placa, modelo, marca, ano);
