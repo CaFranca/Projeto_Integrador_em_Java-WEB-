@@ -9,7 +9,7 @@ public class TelaCadastroVeiculo extends JFrame {
 
     public TelaCadastroVeiculo(JFrame parent) {
         setTitle("Cadastro de Veículo");
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // importante: apenas descarta a janela (conforme PDF). :contentReference[oaicite:4]{index=4}
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // NÃO fecha a aplicação principal
         setSize(420, 300);
         setLocationRelativeTo(parent);
         initComponents();
@@ -23,14 +23,14 @@ public class TelaCadastroVeiculo extends JFrame {
 
         int row = 0;
         gbc.gridx = 0; gbc.gridy = row;
-        panel.add(new JLabel("Placa:"), gbc);
+        panel.add(new JLabel("Placa*:"), gbc);
         gbc.gridx = 1;
         txtPlaca = new JTextField(15);
         panel.add(txtPlaca, gbc);
         row++;
 
         gbc.gridx = 0; gbc.gridy = row;
-        panel.add(new JLabel("Modelo:"), gbc);
+        panel.add(new JLabel("Modelo*:"), gbc);
         gbc.gridx = 1;
         txtModelo = new JTextField(15);
         panel.add(txtModelo, gbc);
@@ -67,12 +67,20 @@ public class TelaCadastroVeiculo extends JFrame {
     private void salvarVeiculo() {
         String placa = txtPlaca.getText().trim();
         String modelo = txtModelo.getText().trim();
+        String marca = txtMarca.getText().trim();
+        String ano = txtAno.getText().trim();
+
         if (placa.isEmpty() || modelo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha os campos obrigatórios", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Preencha os campos obrigatórios: Placa e Modelo.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        // aqui você pode inserir persistência (arquivo, SQLite, etc.). Por enquanto, só exibe mensagem:
-        JOptionPane.showMessageDialog(this, "Veículo salvo com sucesso!");
-        dispose();
+
+        boolean ok = VeiculoDAO.salvar(placa, modelo, marca, ano);
+        if (ok) {
+            JOptionPane.showMessageDialog(this, "Veículo salvo com sucesso!");
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Erro ao salvar o veículo. Veja o console para detalhes.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

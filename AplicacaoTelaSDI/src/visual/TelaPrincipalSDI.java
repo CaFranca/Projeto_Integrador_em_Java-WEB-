@@ -1,8 +1,7 @@
 package visual;
 
 import javax.swing.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.*;
 
 public class TelaPrincipalSDI extends JFrame {
     private JMenuBar mnuBarTelaPrincipal;
@@ -14,35 +13,38 @@ public class TelaPrincipalSDI extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("Sistema de Cadastro de Carros");
+        setTitle("Sistema de Cadastro de Carros - SDI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 600);
-        setLocationRelativeTo(null); // centraliza a janela (conforme PDF). :contentReference[oaicite:3]{index=3}
+        setLocationRelativeTo(null);
 
-        // Menu bar
+        // Barra de menu
         mnuBarTelaPrincipal = new JMenuBar();
         mnuArquivo = new JMenu("Arquivo");
         mnuCadastro = new JMenu("Cadastro");
 
-        // Menu item "Cadastro de Veículo"
         mnuCadastroVeiculo = new JMenuItem("Cadastro de Veículo");
-        // carrega ícone (coloque resources/imagens/car_icon.png)
         java.net.URL iconUrl = getClass().getResource("/imagens/car_icon.png");
         if (iconUrl != null) {
             mnuCadastroVeiculo.setIcon(new ImageIcon(iconUrl));
         }
-        // atalho Ctrl+C (exemplo)
-        mnuCadastroVeiculo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+        // Atalho Ctrl+C (pode mudar se quiser outro)
+        mnuCadastroVeiculo.setAccelerator(KeyStroke.getKeyStroke('C', java.awt.Event.CTRL_MASK));
         mnuCadastroVeiculo.addActionListener(e -> abrirTelaCadastro());
 
         mnuCadastro.add(mnuCadastroVeiculo);
         mnuBarTelaPrincipal.add(mnuArquivo);
         mnuBarTelaPrincipal.add(mnuCadastro);
         setJMenuBar(mnuBarTelaPrincipal);
+
+        // Painel central simples
+        JPanel painelCentral = new JPanel(new BorderLayout());
+        JLabel lbl = new JLabel("<html><center>Sistema SDI - Use o menu Cadastro -> Cadastro de Veículo</center></html>", SwingConstants.CENTER);
+        painelCentral.add(lbl, BorderLayout.CENTER);
+        add(painelCentral);
     }
 
     private void abrirTelaCadastro() {
-        // abre uma janela nova (SDI) — quando fechar, apenas ela será descartada.
         TelaCadastroVeiculo tela = new TelaCadastroVeiculo(this);
         tela.setVisible(true);
     }
