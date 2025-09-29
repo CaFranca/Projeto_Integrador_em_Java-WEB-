@@ -53,6 +53,8 @@ public class TelaCadastroVeiculoMDI extends JInternalFrame {
         setResizable(true);
         setSize(420, 350);
         setVisible(true);
+
+        
     }
 
     // ===========================
@@ -130,11 +132,19 @@ public class TelaCadastroVeiculoMDI extends JInternalFrame {
         if (modeloStr.equals("Ex: Corolla")) modeloStr = "";
         if (cidadeStr.equals("Ex: São Paulo")) cidadeStr = "";
         int ano = 0;
-        try {
-            if (!anoStr.isEmpty() && !anoStr.equals("Ex: 2023")) ano = Integer.parseInt(anoStr);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ano inválido.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
+
+        if (!anoStr.isEmpty()) {
+            try {
+                ano = Integer.parseInt(anoStr);
+                int anoAtual = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+                if (ano < 1900 || ano > anoAtual) {
+                    JOptionPane.showMessageDialog(this, "Ano inválido. Informe um valor entre 1900 e " + anoAtual + ".", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Ano deve ser um número válido.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
         }
 
         if (fabricanteStr.isEmpty() || modeloStr.isEmpty()) {

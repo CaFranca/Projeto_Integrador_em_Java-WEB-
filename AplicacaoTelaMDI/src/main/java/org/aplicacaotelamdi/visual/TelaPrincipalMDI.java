@@ -86,12 +86,29 @@ public class TelaPrincipalMDI extends JFrame {
         TelaCadastroVeiculoMDI telaCadastroCarro = new TelaCadastroVeiculoMDI();
         dskPaneAplicacaoMDI.add(telaCadastroCarro);
         telaCadastroCarro.setVisible(true);
+
+        telaCadastroCarro.toFront();
+
+        try {
+            telaCadastroCarro.setSelected(true);
+        } catch (java.beans.PropertyVetoException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     private void abrirTelaListagem() {
         TelaListaVeiculosMDI lista = new TelaListaVeiculosMDI();
         dskPaneAplicacaoMDI.add(lista);
         lista.setVisible(true);
+
+        lista.toFront();
+
+        try {
+            lista.setSelected(true);
+        } catch (java.beans.PropertyVetoException ex) {
+            ex.printStackTrace();
+        }
     }
 
     // Função para criar ícones redimensionados
