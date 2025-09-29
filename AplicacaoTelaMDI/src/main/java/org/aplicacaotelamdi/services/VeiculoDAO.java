@@ -1,4 +1,4 @@
-package org.aplicacaotelasdi.services;
+package org.aplicacaotelamdi.services;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,11 +10,10 @@ public class VeiculoDAO {
     // Cria a tabela veiculos caso não exista
     public static void criarTabela() {
         String sql = "CREATE TABLE IF NOT EXISTS veiculos (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "placa TEXT NOT NULL," +
-                "modelo TEXT NOT NULL," +
-                "marca TEXT NOT NULL," +
-                "ano INTEGER NOT NULL" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "fabricante TEXT NOT NULL," +
+                    "modelo TEXT NOT NULL," +
+                    "cidade TEXT NOT NULL" +
                 ");";
 
         try (Connection conn = Database.connect();
@@ -26,15 +25,14 @@ public class VeiculoDAO {
     }
 
     // Salva um novo veículo
-    public static boolean salvar(String placa, String modelo, String marca, int ano) {
-        String sql = "INSERT INTO veiculos (placa, modelo, marca, ano) VALUES (?, ?, ?, ?)";
+    public static boolean salvar(String fabricante, String modelo, String cidade) {
+        String sql = "INSERT INTO veiculos (fabricante, modelo, cidade) VALUES (?, ?, ?)";
         try (Connection conn = Database.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, placa);
+            pstmt.setString(1, fabricante);
             pstmt.setString(2, modelo);
-            pstmt.setString(3, marca);
-            pstmt.setInt(4, ano);
+            pstmt.setString(3, cidade);
             pstmt.executeUpdate();
             return true;
 
@@ -45,16 +43,15 @@ public class VeiculoDAO {
     }
 
     // Atualiza um veículo existente
-    public static boolean atualizar(int id, String placa, String modelo, String marca, int ano) {
-        String sql = "UPDATE veiculos SET placa=?, modelo=?, marca=?, ano=? WHERE id=?";
+    public static boolean atualizar(int id, String fabricante, String modelo, String cidade) {
+        String sql = "UPDATE veiculos SET fabricante=?, modelo=?, cidade=? WHERE id=?";
         try (Connection conn = Database.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, placa);
+            pstmt.setString(1, fabricante);
             pstmt.setString(2, modelo);
-            pstmt.setString(3, marca);
-            pstmt.setInt(4, ano);
-            pstmt.setInt(5, id);
+            pstmt.setString(3, cidade);
+            pstmt.setInt(4, id);
 
             pstmt.executeUpdate();
             return true;

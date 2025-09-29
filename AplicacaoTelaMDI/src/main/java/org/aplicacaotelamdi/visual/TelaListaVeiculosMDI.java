@@ -1,7 +1,7 @@
-package org.aplicacaotelasdi.visual;
+package org.aplicacaotelamdi.visual;
 
-import org.aplicacaotelasdi.services.Database;
-import org.aplicacaotelasdi.services.VeiculoDAO;
+import org.aplicacaotelamdi.services.Database;
+import org.aplicacaotelamdi.services.VeiculoDAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,40 +10,42 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class TelaListaVeiculos extends JFrame {
+public class TelaListaVeiculosMDI extends JInternalFrame {
 
     private JTable tabela;
     private DefaultTableModel modelo;
-    private JButton btnEditar, btnExcluir;
+    private JButton btnExcluir;
 
-    public TelaListaVeiculos(JFrame parent) {
+    public TelaListaVeiculosMDI() {
         setTitle("Lista de Veículos");
         setSize(700, 450);
-        setLocationRelativeTo(parent);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setClosable(true);
+        setMaximizable(true);
+        setIconifiable(true);
+        setResizable(true);
+        setVisible(true);
+
         initComponents();
         carregarVeiculos();
     }
 
     private void initComponents() {
         modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[]{"ID", "Placa", "Modelo", "Marca", "Ano"});
+        modelo.setColumnIdentifiers(new String[]{"ID", "Fabricante", "Modelo", "Cidade"}); // Corrigido: "Marca" e "Ano" não existem
 
+        
         tabela = new JTable(modelo);
         JScrollPane scroll = new JScrollPane(tabela);
         add(scroll, BorderLayout.CENTER);
 
         // Painel inferior com botões
         JPanel painelBotoes = new JPanel();
-        btnEditar = new JButton("Editar");
-        btnEditar.setIcon(criarIcone("/imagens/edit_icon.png", 20, 20));
-        btnEditar.addActionListener(e -> editarVeiculo());
+
 
         btnExcluir = new JButton("Excluir");
         btnExcluir.setIcon(criarIcone("/imagens/delete_icon.png", 20, 20));
         btnExcluir.addActionListener(e -> excluirVeiculo());
 
-        painelBotoes.add(btnEditar);
         painelBotoes.add(btnExcluir);
 
         add(painelBotoes, BorderLayout.SOUTH);
@@ -61,10 +63,9 @@ public class TelaListaVeiculos extends JFrame {
             while (rs.next()) {
                 modelo.addRow(new Object[]{
                         rs.getInt("id"),
-                        rs.getString("placa"),
+                        rs.getString("fabricante"),
                         rs.getString("modelo"),
-                        rs.getString("marca"),
-                        rs.getInt("ano")
+                        rs.getString("cidade")
                 });
             }
 
@@ -74,27 +75,7 @@ public class TelaListaVeiculos extends JFrame {
         }
     }
 
-    private void editarVeiculo() {
-        int linha = tabela.getSelectedRow();
-        if (linha == -1) {
-            JOptionPane.showMessageDialog(this, "Selecione um veículo para editar.");
-            return;
-        }
 
-        int id = (int) modelo.getValueAt(linha, 0);
-        String placa = (String) modelo.getValueAt(linha, 1);
-        String modeloStr = (String) modelo.getValueAt(linha, 2);
-        String marca = (String) modelo.getValueAt(linha, 3);
-        int ano = (int) modelo.getValueAt(linha, 4);
-
-        TelaCadastroVeiculo tela = new TelaCadastroVeiculo(this, id, placa, modeloStr, marca, ano);
-        tela.setVisible(true);
-        tela.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                carregarVeiculos(); // Recarrega a tabela após editar
-            }
-        });
-    }
 
     private void excluirVeiculo() {
         int linha = tabela.getSelectedRow();
