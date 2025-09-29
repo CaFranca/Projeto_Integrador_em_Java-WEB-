@@ -1,6 +1,6 @@
-package org.aplicacaotelasdi.visual;
+package org.aplicacaotelamdi.EditarBackup;
 
-import org.aplicacaotelasdi.services.VeiculoDAO;
+import org.aplicacaotelamdi.services.VeiculoDAO;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,19 +1,22 @@
-package org.aplicacaotelasdi.visual;
+package org.aplicacaotelamdi.visual;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-public class TelaPrincipalSDI extends JFrame {
+public class TelaPrincipalMDI extends JFrame {
+    private JDesktopPane dskPaneAplicacaoMDI;
     private JMenuBar mnuBarTelaPrincipal;
     private JMenu mnuArquivo, mnuCadastro;
     private JMenuItem mnuCadastroVeiculo, mnuListarVeiculos, mnuSair;
 
-    public TelaPrincipalSDI() {
+    public TelaPrincipalMDI() {
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("Sistema de Veículos - SDI");
+        setTitle("Sistema de Veículos - MDI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 600);
         setLocationRelativeTo(null);
@@ -21,6 +24,33 @@ public class TelaPrincipalSDI extends JFrame {
         // Ícone da janela
         setIconImage(criarIcone("/imagens/car_icon.png", 20, 20).getImage());
 
+        // Cria o DesktopPane e define layout BorderLayout para centralizar o label
+        dskPaneAplicacaoMDI = new JDesktopPane();
+        dskPaneAplicacaoMDI.setLayout(null);
+
+        JLabel boasVindasLabel = new JLabel("Bem-vindo ao Sistema de Veículos", SwingConstants.CENTER);
+        boasVindasLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        boasVindasLabel.setForeground(Color.DARK_GRAY);
+
+        // Define tamanho inicial (pode ser zero, vai ajustar depois)
+        boasVindasLabel.setBounds(0, 0, 0, 30);
+
+        dskPaneAplicacaoMDI.add(boasVindasLabel, JDesktopPane.DEFAULT_LAYER);
+
+        // Ajusta o tamanho do label sempre que o desktop pane mudar de tamanho
+        dskPaneAplicacaoMDI.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int width = dskPaneAplicacaoMDI.getWidth();
+                int height = dskPaneAplicacaoMDI.getHeight();
+
+                boasVindasLabel.setBounds(0, height/2 - 15, width, 30); // 30 altura, ajusta y para centralizar verticalmente
+            }
+        });
+
+        setContentPane(dskPaneAplicacaoMDI);
+
+        
         // Barra de menu
         mnuBarTelaPrincipal = new JMenuBar();
         mnuArquivo = new JMenu("Arquivo");
@@ -49,24 +79,18 @@ public class TelaPrincipalSDI extends JFrame {
         mnuBarTelaPrincipal.add(mnuArquivo);
         mnuBarTelaPrincipal.add(mnuCadastro);
         setJMenuBar(mnuBarTelaPrincipal);
-
-        // Painel central com instruções
-        JPanel painelCentral = new JPanel(new BorderLayout());
-        JLabel lbl = new JLabel(
-                "<html><center>Sistema SDI - Use o menu Cadastro -> Cadastro de Veículo ou Listar Veículos</center></html>",
-                SwingConstants.CENTER
-        );
-        painelCentral.add(lbl, BorderLayout.CENTER);
-        add(painelCentral);
     }
 
     private void abrirTelaCadastro() {
-        TelaCadastroVeiculo tela = new TelaCadastroVeiculo(this);
-        tela.setVisible(true);
+        
+        TelaCadastroVeiculoMDI telaCadastroCarro = new TelaCadastroVeiculoMDI();
+        dskPaneAplicacaoMDI.add(telaCadastroCarro);
+        telaCadastroCarro.setVisible(true);
     }
 
     private void abrirTelaListagem() {
-        TelaListaVeiculos lista = new TelaListaVeiculos(this);
+        TelaListaVeiculosMDI lista = new TelaListaVeiculosMDI();
+        dskPaneAplicacaoMDI.add(lista);
         lista.setVisible(true);
     }
 
