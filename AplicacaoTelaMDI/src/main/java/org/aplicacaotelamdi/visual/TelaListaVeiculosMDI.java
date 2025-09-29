@@ -31,7 +31,7 @@ public class TelaListaVeiculosMDI extends JInternalFrame {
 
     private void initComponents() {
         modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[]{"ID", "Fabricante", "Modelo", "Cidade"}); // Corrigido: "Marca" e "Ano" não existem
+        modelo.setColumnIdentifiers(new String[]{"ID", "Fabricante", "Modelo", "Cidade", "Ano"});
 
         
         tabela = new JTable(modelo);
@@ -65,7 +65,8 @@ public class TelaListaVeiculosMDI extends JInternalFrame {
                         rs.getInt("id"),
                         rs.getString("fabricante"),
                         rs.getString("modelo"),
-                        rs.getString("cidade")
+                        rs.getString("cidade"),
+                        rs.getString("ano")
                 });
             }
 

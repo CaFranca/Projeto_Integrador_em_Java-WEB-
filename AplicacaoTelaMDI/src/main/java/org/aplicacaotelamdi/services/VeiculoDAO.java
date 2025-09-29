@@ -10,9 +10,9 @@ public class VeiculoDAO {
     public static void criarTabela() {
         String sql = "CREATE TABLE IF NOT EXISTS veiculos (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "placa TEXT NOT NULL," +
+                "fabricante TEXT NOT NULL," +
                 "modelo TEXT NOT NULL," +
-                "marca TEXT," +
+                "cidade TEXT," +
                 "ano INTEGER" +
                 ");";
 
@@ -25,14 +25,14 @@ public class VeiculoDAO {
     }
 
     // Salva novo veículo
-    public static boolean salvar(String placa, String modelo, String marca, int ano) {
-        String sql = "INSERT INTO veiculos (placa, modelo, marca, ano) VALUES (?, ?, ?, ?)";
+    public static boolean salvar(String fabricante, String modelo, String cidade, int ano) {
+        String sql = "INSERT INTO veiculos (fabricante, modelo, cidade, ano) VALUES (?, ?, ?, ?)";
         try (Connection conn = Database.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, placa);
+            pstmt.setString(1, fabricante);
             pstmt.setString(2, modelo);
-            pstmt.setString(3, marca);
+            pstmt.setString(3, cidade);
             if (ano == 0) {
                 pstmt.setNull(4, Types.INTEGER);
             } else {
@@ -49,14 +49,14 @@ public class VeiculoDAO {
     }
 
     // Atualiza veículo existente
-    public static boolean atualizar(int id, String placa, String modelo, String marca, int ano) {
-        String sql = "UPDATE veiculos SET placa=?, modelo=?, marca=?, ano=? WHERE id=?";
+    public static boolean atualizar(int id, String fabricante, String modelo, String cidade, int ano) {
+        String sql = "UPDATE veiculos SET fabricante=?, modelo=?, cidade=?, ano=? WHERE id=?";
         try (Connection conn = Database.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, placa);
+            pstmt.setString(1, fabricante);
             pstmt.setString(2, modelo);
-            pstmt.setString(3, marca);
+            pstmt.setString(3, cidade);
             if (ano == 0) {
                 pstmt.setNull(4, Types.INTEGER);
             } else {
@@ -92,7 +92,7 @@ public class VeiculoDAO {
     // Lista todos os veículos (para JTable)
     public static List<String[]> listarTodos() {
         List<String[]> lista = new ArrayList<>();
-        String sql = "SELECT id, placa, modelo, marca, ano FROM veiculos";
+        String sql = "SELECT id, fabricante, modelo, cidade, ano FROM veiculos";
 
         try (Connection conn = Database.connect();
              Statement stmt = conn.createStatement();
@@ -100,11 +100,11 @@ public class VeiculoDAO {
 
             while (rs.next()) {
                 String id = String.valueOf(rs.getInt("id"));
-                String placa = rs.getString("placa");
+                String fabricante = rs.getString("fabricante");
                 String modelo = rs.getString("modelo");
-                String marca = rs.getString("marca");
+                String cidade = rs.getString("cidade");
                 String ano = rs.getString("ano");
-                lista.add(new String[]{id, placa, modelo, marca, ano});
+                lista.add(new String[]{id, fabricante, modelo, cidade, ano});
             }
 
         } catch (SQLException e) {
